@@ -8,7 +8,7 @@ from .save import TypescriptSave
 from .show_doc import TypescriptShowDoc
 from .signature import TypescriptSignaturePanel, TypescriptSignaturePopup
 from .get_code_fixes import (
-    TypescriptGetCodeFixesCommand,
+    TypescriptRequestCodeFixesCommand,
     ReplaceTextCommand
 )
 from .format import (
@@ -47,7 +47,7 @@ __all__ = [
     "TypescriptProjectErrorList",
     "TypescriptGoToError",
     "TypescriptFormatBrackets",
-    "TypescriptGetCodeFixesCommand",
+    "TypescriptRequestCodeFixesCommand",
     "ReplaceTextCommand",
     "TypescriptFormatDocument",
     "TypescriptFormatLine",
