@@ -47,7 +47,8 @@ class TypescriptRequestCodeFixesCommand(TypeScriptBaseTextCommand):
     def handle_selection(self, idx):
         if idx == -1:
             return
-        all_changes = self.all_code_fixes['body'][idx]['changes'][0]['textChanges']
+        all_changes = self.all_code_fixes['body'][
+            idx]['changes'][0]['textChanges']
         for change in all_changes:
             text = change['newText']
             if text[:1] == '\n':
@@ -96,8 +97,5 @@ class TypescriptRequestCodeFixesCommand(TypeScriptBaseTextCommand):
                 if len(self.all_code_fixes['body']):
                     possibleFixesDescriptions = list(
                         map(lambda fix: fix['description'], self.all_code_fixes['body']))
-                    if len(possibleFixesDescriptions) == 1:
-                        self.handle_selection(0)
-                    else:
-                        self.view.window().show_quick_panel(
-                            possibleFixesDescriptions, self.handle_selection, False, -1)
+                    self.view.window().show_quick_panel(
+                        possibleFixesDescriptions, self.handle_selection, False, -1)

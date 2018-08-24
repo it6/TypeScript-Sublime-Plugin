@@ -3,6 +3,9 @@ from ..libs.text_helpers import escape_html
 from .base_command import TypeScriptBaseTextCommand
 from ..libs.popup_manager import load_html_template
 from string import Template
+from textwrap import wrap
+
+wrap_width = 75
 
 def load_quickinfo_and_error_popup_template():
     return load_html_template("quickinfo_and_error_popup.html")
@@ -66,11 +69,12 @@ class TypescriptQuickInfoDoc(TypeScriptBaseTextCommand):
                 self.template = Template(load_quickinfo_and_error_popup_template())
             text_parts = { "error": error_html, "info_str": escape_html(info_str), "doc_str": escape_html(doc_str) }
             html = self.template.substitute(text_parts)
-            self.view.show_popup(html, flags=sublime.HIDE_ON_MOUSE_MOVE_AWAY, location=display_point, max_height=300, max_width=1500)
+            self.view.show_popup(html, flags=sublime.HIDE_ON_MOUSE_MOVE_AWAY, location=display_point, max_height=800, max_width=800)
 
     def get_error_text_html(self, pt):
         client_info = cli.get_or_add_file(self.view.file_name())
         error_text = ""
+        error_text_wrap = []
         for (region, text) in client_info.errors['syntacticDiag']:
             if region.contains(pt):
                 error_text = text
@@ -79,7 +83,10 @@ class TypescriptQuickInfoDoc(TypeScriptBaseTextCommand):
             if region.contains(pt):
                 error_text = text
                 break
-        return escape_html(error_text)
+        for splitText in error_text.splitlines():
+            error_text_wrap = error_text_wrap + wrap(splitText, wrap_width)
+
+        return escape_html('\n'.join(error_text_wrap))
 
     def run(self, text, hover_point=None):
         check_update_view(self.view)
